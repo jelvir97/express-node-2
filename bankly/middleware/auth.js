@@ -36,7 +36,7 @@ function requireAdmin(req, res, next) {
 function currUserOrAdmin(req, res, next) {
   try {
     if (!req.curr_admin && req.curr_username !== req.params.username) {
-      throw new ExpressError('Only  that user or admin can edit a user.', 401);
+      return next({ status: 401, message: 'Unauthorized' });
     }
     next();
   } catch (err) {
@@ -64,6 +64,7 @@ function authUser(req, res, next) {
       let payload = jwt.decode(token);
       req.curr_username = payload.username;
       req.curr_admin = payload.admin;
+      console.log('*********', payload.username, payload.admin)
     }
     return next();
   } catch (err) {
