@@ -31,6 +31,19 @@ function requireAdmin(req, res, next) {
   }
 }
 
+/** Authorization Middleware: Requires user is current user or staff. */
+
+function currUserOrAdmin(req, res, next) {
+  try {
+    if (!req.curr_admin && req.curr_username !== req.params.username) {
+      throw new ExpressError('Only  that user or admin can edit a user.', 401);
+    }
+    next();
+  } catch (err) {
+    return next(err);
+  }
+}
+
 /** Authentication Middleware: put user on request
  *
  * If there is a token, verify it, get payload (username/admin),
@@ -62,5 +75,6 @@ function authUser(req, res, next) {
 module.exports = {
   requireLogin,
   requireAdmin,
-  authUser
+  authUser,
+  currUserOrAdmin
 };

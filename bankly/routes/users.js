@@ -4,7 +4,7 @@ const User = require('../models/user');
 const express = require('express');
 const router = new express.Router();
 const ExpressError = require('../helpers/expressError');
-const { authUser, requireLogin, requireAdmin } = require('../middleware/auth');
+const { authUser, requireLogin, requireAdmin, currUserOrAdmin } = require('../middleware/auth');
 
 /** GET /
  *
@@ -63,15 +63,17 @@ router.get('/:username', authUser, requireLogin, async function(
  *
  */
 
-router.patch('/:username', authUser, requireLogin, requireAdmin, async function(
+router.patch('/:username', authUser, requireLogin, currUserOrAdmin, async function(
   req,
   res,
   next
 ) {
   try {
-    if (!req.curr_admin && req.curr_username !== req.params.username) {
-      throw new ExpressError('Only  that user or admin can edit a user.', 401);
-    }
+    // BUG #1 FIXED - moved fixed auth issue in middleware ^^
+
+          // if (!req.curr_admin && req.curr_username !== req.params.username) {
+          //   throw new ExpressError('Only  that user or admin can edit a user.', 401);
+          // }
 
     // get fields to change; remove token so we don't try to change it
     let fields = { ...req.body };
