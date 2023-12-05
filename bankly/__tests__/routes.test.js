@@ -114,6 +114,14 @@ describe("GET /users", function() {
     expect(response.statusCode).toBe(401);
   });
 
+  // TEST BUG #4
+  test("should deny access if invalid token provided", async function() {
+    const response = await request(app)
+      .get("/users")
+      .send({ _token: 'not.A.Token' });
+    expect(response.statusCode).toBe(401);
+  });
+
   test("should list all users", async function() {
     const response = await request(app)
       .get("/users")
@@ -189,7 +197,7 @@ describe("PATCH /users/[username]", function() {
       password: expect.any(String)
     });
   });
-
+  //TEST was here but not passing BUG #3 (maybe?)
   test("should disallowing patching not-allowed-fields", async function() {
     const response = await request(app)
       .patch("/users/u1")

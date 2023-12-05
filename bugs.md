@@ -6,3 +6,5 @@
 - BUG #2 : User.authenticated not awaited in /auth/login.
 
 - BUG #3 : PATCH /users/:username allows for username and admin updates.
+
+- BUG #4 : authUsers not verifying token for signature.
