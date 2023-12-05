@@ -64,7 +64,6 @@ function authUser(req, res, next) {
       let payload = jwt.decode(token);
       req.curr_username = payload.username;
       req.curr_admin = payload.admin;
-      console.log('*********', payload.username, payload.admin)
     }
     return next();
   } catch (err) {

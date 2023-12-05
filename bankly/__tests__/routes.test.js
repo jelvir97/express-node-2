@@ -90,6 +90,22 @@ describe("POST /auth/login", function() {
     expect(username).toBe("u1");
     expect(admin).toBe(false);
   });
+
+  //TEST BUG FIX 2
+  test("should set admin correctly", async function() {
+    const response = await request(app)
+      .post("/auth/login")
+      .send({
+        username: "u3",
+        password: "pwd3"
+      });
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual({ token: expect.any(String) });
+
+    let { username, admin } = jwt.verify(response.body.token, SECRET_KEY);
+    expect(username).toBe("u3");
+    expect(admin).toBe(true);
+  });
 });
 
 describe("GET /users", function() {
