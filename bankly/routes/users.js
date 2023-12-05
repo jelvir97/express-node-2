@@ -77,6 +77,9 @@ router.patch('/:username', authUser, requireLogin, currUserOrAdmin, async functi
 
     // get fields to change; remove token so we don't try to change it
     let fields = { ...req.body };
+
+    //BUG #3 FIXED - username and admin not allowed on patch data
+    if(fields.username||fields.admin) throw new ExpressError("Cannot update username or admin status",401)
     delete fields._token;
 
     let user = await User.update(req.params.username, fields);
